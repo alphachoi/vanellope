@@ -168,22 +168,6 @@ def split_pages(author=None, per=10, status=None, page=1, _type="post"):
     )
 
 
-
-
-
-
-def article_total_like(article):
-    cursor = db.member.find()
-    t = 0
-    for m in cursor:
-        if m.has_key("like") and int(article) in m['like']:
-            t += 1;
-    return t
-
-
-
-
-
 # Comment manipulation
 def remove_comments_with_article(article_sn):
     db.comment.remove({"article": int(article_sn)})

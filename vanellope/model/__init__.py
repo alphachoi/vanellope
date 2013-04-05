@@ -167,6 +167,7 @@ class Member:
             self._model['like'].append(int(article))
         else:
             self._model['like'].remove(int(article))
+            raise exception.DupError()
        
 
     def check_password(self, _pwd):

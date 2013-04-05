@@ -6,6 +6,10 @@ class DupKeyError(Exception):
 	#  which's key is exist
 	pass
 
+class DupError(Exception):
+	# Duplicate value
+	pass
+
 class PatternMatchError(Exception):
 	# This exception is raised when regex pattern not match
 	pass

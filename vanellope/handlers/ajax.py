@@ -25,6 +25,7 @@ from vanellope import da
 from vanellope import db
 from vanellope import Mail
 from vanellope import regex
+from vanellope import exception
 
 from vanellope.handlers import BaseHandler
 
@@ -57,8 +58,9 @@ class ColorHandler(BaseHandler):
 class LikeHandler(BaseHandler):
     def get(self):
         article_sn = self.get_argument("article", None)
-        total_like = da.article_total_like(int(article_sn))
         current_user = self.get_current_user()
+
+        total_like = db.article.find_one({"sn": int(article_sn)})['like']
         if current_user and (int(article_sn) in current_user['like']):
             i_like = True
         else:
@@ -72,11 +74,13 @@ class LikeHandler(BaseHandler):
 
         try:
             master.like(int(article_sn))
-        except:
+            db.article.update({"sn": int(article_sn)}, {"$inc": {"like": 1}})
+        except exception.DupError:
             pass
+            db.article.update({"sn": int(article_sn)}, {"$inc": {"like": -1}})
 
         master.put()
-        total_like = da.article_total_like(int(article_sn))
+        total_like = db.article.find_one({"sn": int(article_sn)})['like']
         self.finish(json.dumps([True, total_like]))
 
 

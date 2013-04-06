@@ -23,8 +23,13 @@
 			<a class="member" href="/member/{{ comment['member']['uid'] }}"><span>{{ comment['member']['name']}}</span></a>
 			<span class="timestamp" style="margin-left:10px">{{ comment['date']}}</span>
 			<span class="comment-floor common-color" >{{ comment['floor'] }}</span>
+			<span class="comment-reply option theme" title="回复" style="visibility: hidden"><i class="icon-reply"></i></span>
 			<br/>
-			<p class="comment">{{ comment['body'] }}</p>
+			<div class="comment-body">
+				{% for i in comment['body'].splitlines() %}
+				<p>{% raw i %}</p>
+				{% end %}
+			</div>
 		</div>   
 		{% end %}
 	</div><!-- end of "div.primary" -->
@@ -63,5 +68,21 @@
 	</div><!-- Closing of widgets-wrapper -->
 
 </div> <!-- Closing of wrapper -->
+<script>	
+	$(document).ready(function(){
+		$("div.comment").mouseenter(function(){
+			$(this).children("span.comment-reply").css({"visibility":"visible"});
+		});
+		$("div.comment").mouseleave(function(){
+			$(this).children("span.comment-reply").css({"visibility":"hidden"});
+		});
+		$("span.comment-reply").click(function(){
+			var user = $(this).siblings("a.member").children("img").attr("alt");
+			$("#articleCommentBox").focus();
+			$("#articleCommentBox").val(" @"+user+" ");
+		});
 
+	});
+
+</script>
 {% include "common/footer.html" %}

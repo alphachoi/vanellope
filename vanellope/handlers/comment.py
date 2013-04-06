@@ -7,6 +7,7 @@ import urllib
 import datetime
 
 import tornado.web
+from tornado.escape import xhtml_escape
 
 from vanellope import db
 from vanellope.model import Comment 
@@ -20,14 +21,34 @@ class CommentHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self, article_sn):
         comment = Comment()
-        m = Member(self.get_current_user()) # wrappered
+        current_user = self.get_current_user() # wrappered
         cmt = self.get_argument('comment', None)
-
+        cmt = xhtml_escape(cmt)
+        cmt = " "+ cmt + " "
+        name_patt = r"[ ]+@([a-zA-Z0-9]{1,16})[ ]+"
+        patt2 = r"[ ]+(@[a-zA-Z0-9]{1,16})[ ]+"
+        lines = cmt.splitlines()
+        cmts = []
+        for line in lines:
+            while True:
+                m = re.search(name_patt, line)
+                if not m:
+                    break
+                name  = m.groups()
+                if name:
+                    member = db.member.find_one({"name":name[0]})
+                    if member:
+                        link = "&nbsp;<a href='/member/%d'><code>@%s</code></a>&nbsp;" % (member['uid'], name[0])
+                    else:
+                        link = "&nbsp;<code>@%s</code>&nbsp;" % (name[0],)
+                line = re.sub(name_patt, link, line, 1)  
+            cmts.append(line) 
+        cmt = "\n\r".join(cmts)
         # basic commenter information
         commenter = {
-            "uid": m.uid,
-            "name": m.name,
-            "avatar": m.avatar,
+            "uid": current_user['uid'],
+            "name": current_user['name'],
+            "avatar": current_user['avatar'],
         }
 
         comment.set_article(int(article_sn))

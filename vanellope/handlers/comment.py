@@ -24,12 +24,12 @@ class CommentHandler(BaseHandler):
         current_user = self.get_current_user() # wrappered
         cmt = self.get_argument('comment', None)
         cmt = xhtml_escape(cmt)
-        cmt = " "+ cmt + " "
         name_patt = r"[ ]+@([a-zA-Z0-9]{1,16})[ ]+"
         patt2 = r"[ ]+(@[a-zA-Z0-9]{1,16})[ ]+"
         lines = cmt.splitlines()
         cmts = []
         for line in lines:
+            line = " " + line + " "
             while True:
                 m = re.search(name_patt, line)
                 if not m:

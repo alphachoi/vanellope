@@ -6,6 +6,7 @@ import sys
 import os.path
 import logging
 import urls
+import config
 
 import tornado.web
 import tornado.ioloop
@@ -14,7 +15,7 @@ from tornado.options import define, options
 
 from vanellope.handlers import BaseHandler
 
-options['log_file_prefix'].set('log/page302.log')
+options['log_file_prefix'].set('/var/log/%s' % config.LOG)
 define("port", default=8000, help="run on the given port", type=int)
 
 ROOT = os.path.abspath(os.path.dirname(__file__))

@@ -136,12 +136,12 @@ div.comment{
 	border-bottom: 1px solid #cdcdcd;
 	overflow: auto;
 }
-p.comment{
+div.comment-body{
 	margin: 0px;
 	max-width: 576px;
 	float: left;
 }
-.comment-floor{
+.comment-floor, .comment-reply{
 	float:right;
 	padding:0px 8px;
 	min-width:10px; 
@@ -149,7 +149,12 @@ p.comment{
 	border-radius: 8px; 
 	text-align:center; 
 	color:#FFFFFF;
+	margin-left: 10px;
+
 }
+
+
+
 
 
 

@@ -26,7 +26,7 @@ class App(tornado.web.Application):
             static_path = os.path.join(ROOT, 'static'),
             template_path = os.path.join(ROOT, 'templates'),
             login_url = "/login",
-            debug = True
+            debug = config.DEBUG
         )
 
         tornado.web.Application.__init__(self, urls.handlers, **SETTINGS)
